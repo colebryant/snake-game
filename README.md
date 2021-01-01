@@ -11,6 +11,12 @@ Part of a series of projects building a computer from first principles.
 
 	3) Press Run.
 
+<<<<<<< HEAD
 	4) Press 'S' to start and begin by using the arrow keys to navigate the snake around the screen.
 
 	5) The goal of the game is to eat as much of the food as possible and increase the score (shown on the bottom right corner). If the snake hits the borders of the screen or its own body, it's game over. Press 'R' to restart the game.
+=======
+	4) Press 's' to start and begin by using the arrow keys to navigate the snake around the screen.
+
+	5) The goal of the game is to eat as much of the food as possible and increase the score (shown on the bottom right corner). If the snake hits the borders of the screen or its own body, it's game over. Press 'r' to restart the game.
+>>>>>>> 20f470a45b918f748f4f606ee1223d29ec1f4f0a
