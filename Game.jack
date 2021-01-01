@@ -1,0 +1,133 @@
+// Represents a Game of Snake
+class Game { 
+	field Player player;
+	field Food food;
+	field int score;
+
+	constructor Game new() {
+		let player = Player.new(251, 123);
+		let food = Food.new();
+		let score = 0;
+		return this;
+	}
+
+	method void start() {
+		/* Houses main game loop. Initiates screen drawings, watches key press events, and performs logic
+		based on occurences in game such as eating food and dying.
+		No inputs or outputs.
+		*/
+		var char currentKey;
+		var boolean end;
+
+		let end = false;
+		while(~end) {
+			do Output.moveCursor(10, 28);
+			do Output.printString("S N A K E");
+			do Output.moveCursor(12, 23);
+			do Output.printString("Press 'S' to Start!");
+			while(~(currentKey = 83) & ~(currentKey = 140)) {
+				let currentKey = Keyboard.keyPressed();
+			}
+			do Screen.clearScreen();
+
+			do player.draw();
+			do food.draw();
+			do Output.moveCursor(22, 0);
+			do Output.printString("SCORE:");
+			do Output.printInt(score);
+			while(~(currentKey = 140)) {
+				let currentKey = Keyboard.keyPressed();
+				if (currentKey = 131) {
+					do player.setDirection(1);
+				}
+				if (currentKey = 133) {
+					do player.setDirection(2);
+				}
+				if (currentKey = 130) {
+					do player.setDirection(3);
+				}
+				if (currentKey = 132) {
+					do player.setDirection(4);
+				}
+				do player.move();
+				if (foodEaten()) {
+					let score = score + 1;
+					do food.remove();
+					do food.alterRandom();
+					do food.draw();
+					do Output.moveCursor(22, 7);
+					do Output.backSpace();
+					do Output.printInt(score);
+					do player.growTail();
+				}
+				if (~player.isAlive()) {
+					do Output.moveCursor(10, 28);
+					do Output.printString("GAME OVER");
+					do Output.moveCursor(12, 27);
+					do Output.printString("Final Score: ");
+					do Output.printInt(score);
+					do Output.moveCursor(14, 23);
+					do Output.printString("Press 'R' to restart");
+					while(~(currentKey = 82)) {
+						let currentKey = Keyboard.keyPressed();
+					}
+					do restart();
+				}
+			}
+			let end = true;
+		}
+		do player.dispose();
+		do food.dispose();
+		do random.dispose();
+		return;
+	}
+
+	method void restart() {
+		/* Refreshes game data when on game restart.
+		No inputs or outputs.
+		*/
+		let score = 0;
+		do Screen.clearScreen();
+		do Output.moveCursor(22, 0);
+		do Output.printString("SCORE:");
+		do Output.printInt(score);
+
+		do player.dispose();
+		let player = Player.new(251, 123);
+		do player.draw();
+		do food.draw();
+		return;
+	}
+
+	method boolean foodEaten() {
+		/* Method to check whether collision has occured between the "snake's head" and food.
+		No inputs.
+		Outputs: boolean
+		*/
+		var int player_x;
+		var int player_y;
+		var int food_x;
+		var int food_y;
+		let player_x = player.getx();
+		let player_y = player.gety();
+		let food_x = food.getx();
+		let food_y = food.gety();
+		if ((((player_x + 3) > (food_x - 10)) & ((player_x + 3) < (food_x + 15))) & (((player_y + 3) > (food_y - 10)) & ((player_y + 3) < (food_y + 15)))) {
+			return true;
+		}
+		else {
+			return false;
+		}
+
+	}
+
+	method void dispose() {
+		/* Method to deallocate memory of game object (including player and food objects).
+		No inputs or outputs. 
+		*/
+		do player.dispose();
+		do food.dispose();
+		do Memory.deAlloc(this);
+		return;
+	}
+}

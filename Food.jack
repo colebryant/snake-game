@@ -1,0 +1,63 @@
+// Represents the randomly appearing food in the Game of Snake
+class Food {
+	field Random random;
+	field int x_location;
+	field int y_location;
+
+	constructor Food new() {
+		let random = Random.new(123);
+		do random.addCallTime(random);
+		return this;
+	}
+
+	method void draw() {
+		/* Method to draw the food on the screen randomly.
+		No inputs or outputs.
+		*/
+		let x_location = random.randRange(501);
+		let y_location = random.randRange(245);
+		do Screen.setColor(true);
+		do Screen.drawCircle(x_location + 5, y_location + 5, 5);
+		return;
+	}
+
+	method void remove() {
+		/* Method to remove the food from the screen.
+		No inputs or outputs.
+		*/
+		do Screen.setColor(false);
+		do Screen.drawCircle(x_location + 5, y_location + 5, 5);
+		return;
+	}
+
+	method void alterRandom() {
+		/* Method to alter the random seed via the Random object.
+		No inputs or outputs.
+		*/
+		do random.addCallTime(1);
+		return;
+	}
+
+	method int getx() {
+		/* Method to return the x location of the food.
+		No inputs.
+		Outputs: int
+		*/
+		return x_location;
+	}
+
+	method int gety() {
+		/* Method to return the y location of the food.
+		No inputs.
+		Outputs: int
+		*/
+		return y_location;
+	}
+
+	method void dispose() {
+		/* Method to deallocate memory of food object (and random object) */
+		do random.dispose();
+		do Memory.deAlloc(this);
+		return;
+	}
+}

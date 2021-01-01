@@ -1,0 +1,11 @@
+// Main class - entryway to program
+
+class Main {
+	function void main() {
+		var Game game;
+		let game = Game.new();
+		do game.start();
+		do game.dispose();
+		return;
+	}
+}

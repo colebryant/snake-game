@@ -1,0 +1,280 @@
+// Represents a player (the snake) in the Game of Snake
+class Player {
+	field int x_location;
+	field int y_location;
+	field int direction;
+	field boolean alive;
+	field int length;
+	field Array tail_x;
+	field Array tail_y;
+	field Array directions;
+	field int acceleration;
+
+	constructor Player new(int x, int y) {
+		let x_location = x;
+		let y_location = y;
+		let length = 0;
+		let direction = 0;
+		let alive = true;
+		let tail_x = Array.new(512);
+		let tail_y = Array.new(512);
+		let directions = Array.new(512);
+		let acceleration = 0;
+
+		return this;
+	}
+
+	method void draw() {
+		/* Draws the "snake head" along with any existing tail. 
+		No inputs or outputs.*/
+		var int i;
+		do Screen.setColor(true);
+		do Screen.drawRectangle(x_location, y_location, x_location + 6, y_location + 6);
+		if (length > 0) {
+			let i = (length);
+			while (i > -1) {
+				do Screen.drawRectangle(tail_x[i], tail_y[i], tail_x[i] + 6, tail_y[i] + 6);
+				let i = i - 1;
+			}
+		}
+		return;
+	}
+
+	method void remove() {
+		/* Erases the previous head / end of tail location.
+		No inputs or outputs */
+		var int i;
+		if (length = 0) {
+			do Screen.setColor(false);
+			do Screen.drawRectangle(x_location, y_location, x_location + 6, y_location + 6);
+		}
+		else {
+			let i = 0;
+			while (i < 4) {
+				do Screen.setColor(false);
+				do Screen.drawRectangle(tail_x[length-i], tail_y[length-i], tail_x[length-i] + 6, tail_y[length-i] + 6);
+				let i = i + 1;
+			}
+		}
+		return;
+	}
+
+	method void growTail() {
+		/* Increases the length of the snake's tail by 20 pixels. Adds the tail based on the final
+		saved direction.
+		No inputs or outputs.
+		*/
+		var int start_x;
+		var int start_y;
+		var int start_d;
+		var int i;
+
+		if (length = 0) {
+			let start_x = x_location;
+			let start_y = y_location;
+			let start_d = direction;
+			// let length = 1;
+		}
+		else {
+			let start_x = tail_x[length];
+			let start_y = tail_y[length];
+			let start_d = directions[length];
+		}
+
+		let i = 20;
+
+		while(i > 0) {
+			let length = length + 1;
+			if(start_d = 1) {
+				let tail_x[length] = start_x;
+				let tail_y[length] = (start_y + (20 - i));
+			}
+			if (start_d = 2) {
+				let tail_x[length] = start_x;
+				let tail_y[length] = (start_y - (20 - i));
+			}
+			if (start_d = 3) {
+				let tail_x[length] = (start_x + (20 - i));
+				let tail_y[length] = start_y;
+			}
+			if (start_d = 4) {
+				let tail_x[length] = (start_x - (20 - i));
+				let tail_y[length] = start_y;
+			}
+			let directions[length] = start_d;
+			let i = i - 1;
+		}
+
+		if (acceleration < 4) {
+			let acceleration = acceleration + 1;
+		}
+
+		return;
+	}
+
+	method void updateTail() {
+		/* Updates the stored x and y values associated with the snake's tail.
+		No inputs or outputs.
+		*/
+		var int i;
+		let i = length;
+		let tail_x[0] = x_location;
+		let tail_y[0] = y_location;
+		let directions[0] = direction;
+		while(i > 0) {
+			let tail_x[i] = tail_x[i-1];
+			let tail_y[i] = tail_y[i-1];
+			let directions[i] = directions[i-1];
+			let i = i - 1;
+		}
+		return;
+	}
+
+	method boolean checkCollision() {
+		/* Checks to see if there has been a self-collision with the snake's own tail.
+		No inputs.
+		Outputs: boolean */
+		var int i;
+		var boolean collision;
+		let i = length;
+		let collision = false;
+
+		while ((i > 7) & (~collision)) {
+			if ((((x_location + 3) > (tail_x[i])) & ((x_location + 3) < (tail_x[i] + 7))) & (((y_location + 3) > (tail_y[i])) & ((y_location + 3) < (tail_y[i] + 7)))) {
+				let collision = true;
+			} 
+			let i = i - 1;
+		}
+		return collision;
+	}
+
+	method void setDirection(int dir) {
+		/* Method to set the direction of the player.
+		Inputs: int (dir)
+		No outputs. 
+		*/
+		let direction = dir;
+		return;
+	}
+
+	method boolean isAlive() {
+		/* Returns whether the player is alive.
+		No inputs.
+		Outputs: boolean
+		*/
+		return alive;
+	}
+
+	method int getx() {
+		/* Returns the player's x location.
+		No inputs.
+		Outputs: int
+		*/
+		return x_location;
+	}
+
+	method int gety() {
+		/* Returns the player's y location.
+		No inputs.
+		Outputs: int
+		*/
+		return y_location;
+	}
+
+	method void move() {
+		/* Moves the player based on the direction the player is pointing.
+		No inputs or outputs.
+		*/
+		if (direction = 1) {
+			do goUp();
+		}
+		if (direction = 2) {
+			do goDown();
+		}
+		if (direction = 3) {
+			do goLeft();
+		}
+		if (direction = 4) {
+			do goRight();
+		}
+		do Sys.wait(5 - acceleration);
+
+		if (checkCollision()) {
+			let alive = false;
+		}
+		return;
+	}
+
+	method void goUp() {
+		/* Method to move the player up the screen.
+		No inputs or outputs.
+		*/
+		if (y_location > 0) {
+			do remove();
+			let y_location = y_location - 1;
+			do updateTail();
+			do draw();
+		}
+		else {
+			let alive = false;
+		}
+		return;
+	}
+
+	method void goDown() {
+		/* Method to move the player down the screen.
+		Checks for collision with wall.
+		No inputs or outputs.
+		*/
+		if (y_location < 248) {
+			do remove();
+			let y_location = y_location + 1;
+			do updateTail();
+			do draw();
+		}
+		else {
+			let alive = false;
+		}
+		return;
+	}
+
+	method void goLeft() {
+		/* Method to move the player leftwards on the screen.
+		Checks for collision with wall.
+		No inputs or outputs.
+		*/
+		if (x_location > 0) {
+			do remove();
+			let x_location = x_location - 1;
+			do updateTail();
+			do draw();
+		}
+		else {
+			let alive = false;
+		}
+		return;
+	}
+
+	method void goRight() {
+		/* Method to move the player leftwards on the screen.
+		Checks for collision with wall.
+		No inputs or outputs.
+		*/
+		if (x_location < 504) {
+			do remove();
+			let x_location = x_location + 1;
+			do updateTail();
+			do draw();
+		}
+		else {
+			let alive = false;
+		}
+		return;
+	}
+
+	method void dispose() {
+		/* Method to deallocate memory of Player object */
+		do Memory.deAlloc(this);
+		return;
+	}
+}
