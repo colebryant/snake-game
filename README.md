@@ -10,6 +10,6 @@ nand2tetris Project 9
 
 	3) Press Run.
 
-	4) Press S to start and begin by using the arrow keys to navigate the snake around the screen.
+	4) Press 's' to start and begin by using the arrow keys to navigate the snake around the screen.
 
 	5) The goal of the game is to eat as much of the food as possible and increase the score (shown on the bottom right corner). If the snake hits the borders of the screen or its own body, it's game over. Press 'r' to restart the game.
