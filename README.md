@@ -1,5 +1,5 @@
-nand2tetris Project 9
-Part of a series of projects building a computer from first principles.
+
+Part of a series of projects building a computer from first principles (nand2tetris Project 9).
 
 * NOTE: Utilized existing Jack Random Number generator class from a GitHub account in order to randomize the location of the food in the game, as the Jack library does not have a random number generator. Source: https://github.com/xctom/Nand2Tetris/blob/master/projects/09/PigDice/Random.jack. This file is called Random.jack in my implementation.
 
