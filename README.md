@@ -1,6 +1,6 @@
 
 ![](SnakeScreenShot.png)
-Part of a series of projects building a computer from first principles (nand2tetris Project 9).
+Part of a series of projects building a computer from first principles (see nand2tetris.org - Project 9).
 
 * To Play:
 
